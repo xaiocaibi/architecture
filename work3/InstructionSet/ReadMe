@@ -1,0 +1,6 @@
+There are 3 test sample in the file 'Test'
+"InstructionSet" change:
+|--SLLI
+|--SRLI
+|--SRAI
+|--JALR

@@ -1,0 +1,17 @@
+LOAD r3,#0
+SUBI r3,2
+ADD r1,r0,r0
+ADD r2,r3,r0
+LOAD r4,r2,1
+LOAD r5,r2,2
+CMP r5,r4
+BN $11
+STORE r4,r2,2
+STORE r5,r2,1
+SUBI r2,1
+CMP r2,r1
+BNN r0,5
+ADDI r1,1
+CMP r3,r1
+BNN r0,$4
+NOP

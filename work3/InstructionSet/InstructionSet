@@ -1,0 +1,68 @@
+'?' explain that the point is unknown
+Immediate number 'a' include the sign
+RISC-V register x0 = 0 (x0 is the register with #0 in register list)
+
+Note: x0 is the read-only register
+
+| 31-Imm(a)-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--ADDI  rd,rs1,a   -> rd = rs1 + a
+|--MV    rd,rs1     -> rd = rs1                           (ADDI rd,rs1,0)
+|--STLI  rd,rs1,a   -> rd = rs1 < a? 1:0
+|--STLIU rd,rs1,a   -> rd = Unsign(rs1) < Unsign(a)? 1:0
+|--SEQZ  rd,rs1     -> rd = rs1 == 0? 1:0                 (STLIU rd,rs1,1) 
+|--ANDI  rd,rs1,a   -> rd = rs1 & a
+|--ORI   rd,rs1,a   -> rd = rs1 | a
+|--XORI  rd,rs1,a   -> rd = rs1 ^ a
+|--NOT   rd,rs      -> rd = ~rs1                          (XORI rd,rs1,-1)
+| 31-Imm(s)-25 | 24-Imm(a)-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--SLLI  rd,rs1,a -> rd = rs1 <<< a
+|--SRLI  rd,rs1,a -> rd = rs1 >>> a
+|--SRAI  rd,rs1,a -> rd = rs1 >> a
+| 31-Imm(a)-12 | 11-rd-7 | 6-opcode-0|
+|--LUI   rd,a       -> rd = 'Unsign(a)'+ 0x000
+|--AUIPC rd,a       -> rd = pc + ('Unsign(a)+0x000')
+| 31-funct7-25 | 24-rs2-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--ADD   rd,rs1,rs2 -> rd = rs1 + rs2
+|--SLT   rd,rs1,rs2 -> rd = rs1 < rs2? 1:0
+|--SLTU  rd,rs1,rs2 -> rd = Unsign(rs1) < Unsign(rs2)?1:0
+|--SNEZ  rd,rs      -> rd = rs2 != 0? 1:0                 (SLTU,rd,x0,rs2)
+|--AND   rd,rs1,rs2 -> rd = rs1 & rs2
+|--OR    rd,rs1,rs2 -> rd = rs1 | rs2
+|--XOR   rd,rs1,rs2 -> rd = rs1 ^ rs2
+|--SLL   rd,rs1,rs2 -> rd = rs1 <<< (rs2 & 0x1f)
+|--SRL   rd,rs1,rs2 -> rd = rs1 >>> (rs2 & 0x1f)
+|--SUB   rd,rs1,rs2 -> rd = rs1 - rs2
+|--SRA   rd,rs1,rs2 -> rd = rs1 >> (rs2 & 0x1f)
+| 31-Imm(a)-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--NOP              -> Do Nothing                         (ADDI x0,x0,0)
+
+| 31-Imm(a(1))|30-Imm(a(2))-21|20-Imm(a(3))|19-Imm(a(4))-12 | 11-rd-7 | 6-opcode-0 |
+|--JAL   rd,a       -> x1 = pc+a, rd = pc+4
+|--J     a          -> x1 = pc+a                          (JAL x0,a)
+| 31-Imm(a)-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--JALR  rd,rs1,a   -> x1 = (rs1+a)&0xfffffffe, rd(x0) = pc+4
+
+| 31(a(12))|30-a(10:5)-25| 24-rs2-20 | 19-rs1-15 | 14-funct3-12 | 11-a(4:1)-8|7(a(11)) | 6-opcode-0 |
+| 'a' is the offset
+|--BEQ   rs1,rs2,a    -> x1 = rs1==rs2? pc+a:pc
+|--BNQ   rs1,rs2,a    -> x1 = rs1!=rs2? pc+a:pc
+|--BLT   rs1,rs2,a    -> x1 = rs1<rs2? pc+a:pc
+|--BLTU  rs1,rs2,a    -> x1 = Unsign(rs1)<Unsign(rs2)? pc+a:pc
+|--BGE   rs1,rs2,a    -> x1 = rs1>=rs2? pc+a:pc
+|--BGEU  rs1,rs2,a    -> x1 = Unsign(rs1)>=Unsign(rs2)? pc+a:pc
+
+| 31-Imm(a)-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|-- LOAD rd,rs1,a     -> rd = Mem(#(rs1+a))
+| 31-a(11:5)-20 | 24-rs2-20 | 19-rs1-15 | 14-funct3-12 | 11-a(4:0)-7 | 6-opcode-0 |
+|--STORE rs1,rs2,a    -> Mem(#(rs1+a)) = rs2
+|--LW,LH,LHU,SW,SH,SB?
+
+||
+|--FENCE
+| 31-Imm(a)-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--FENCE.I
+
+| 31-csr-20 | 19-rs1-15 | 14-funct3-12 | 11-rd-7 | 6-opcode-0 |
+|--CSR ?
+
+|--Special ?

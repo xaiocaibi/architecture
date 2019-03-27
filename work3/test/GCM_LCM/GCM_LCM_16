@@ -1,0 +1,22 @@
+LOAD r1,r0,1
+LOAD r2,r0,2
+ADD r3,r0,r1
+SUB r1,r1,r2
+BZ r0,10
+BNN r0,3
+ADD r1,r0,r2
+ADD r2,r0,r3
+JUMP 3
+STORE r2,r0,3
+LOAD r1,r0,1
+LOAD r2,r0,2
+ADDI r4,1
+SUB r2,r2,r3
+BZ r0,17
+JUMP 13
+SUBI r4,1
+BN r0,21
+ADD r5,r5,r1
+JUMP 17
+STORE r5,r0,4
+NOP
